@@ -29,8 +29,7 @@ app.use(express.static(path.join(__dirname, "public")));
 const DBUrl=process.env.ATLASDB_URL;
 main().catch((err) => console.log(err));
 async function main() {
-  // mongoose.connect(DBUrl);
-  mongoose.connect("mongodb://127.0.0.1:27017/rentique")
+  mongoose.connect(DBUrl);
   console.log("Database connected");
 }
 const mySecret=process.env.SECRET;
