@@ -31,15 +31,19 @@ app.use(express.static(path.join(__dirname, "public")));
 const DBUrl=process.env.ATLASDB_URL;
 main().catch((err) => console.log(err));
 async function main() {
-  mongoose.connect(DBUrl);
-  console.log("Database connected");
+   try {
+    await mongoose.connect(DBUrl);
+    console.log("Database connected");
+  } catch (err) {
+    console.error("DB connection failed:", err);
+  }
 }
 const mySecret=process.env.SECRET;
 
 const store = MongoStore.create({
   mongoUrl: DBUrl,
   crypto: {
-    secret:mySecret,
+    secret: mySecret,
   },
   touchAfter: 24 * 3600,
 });
@@ -76,7 +80,9 @@ app.use((req, res, next) => {
   next();
 });
 
-
+app.get("/",(req,res)=>{
+  res.redirect("/listings");
+})
 // routes
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
