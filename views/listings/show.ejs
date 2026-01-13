@@ -11,7 +11,7 @@
     <p><b>Country:</b> <%= listing.country %></p>
     <p><b>Location:</b><%= listing.location %></p>
    </div>
-   <%if(currUser && currUser._id.equals(listing.owner._id)){%>
+   <%if(currUser && (currUser._id.equals(listing.owner._id)||currUser._id.equals(adminId))){%>
   <div class="row offset-md-2 mb-4 mt-3 show-btns">
     <div class="col-md-2">
          <form action="/listings/<%= listing._id %>/edit" method="get">
@@ -69,7 +69,7 @@
                <p class="card-text"><%= review.comment %></p>
 
             </div>
-           <% if(currUser && currUser._id.equals(review.author._id)){%>
+           <% if(currUser && (currUser._id.equals(review.author._id)||currUser._id.equals(adminId))){%>
             <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
                <button type="submit" class="btn btn-sm btn-outline-danger delete-review"><i class="fa-solid fa-trash-can"></i></button>
             </form>

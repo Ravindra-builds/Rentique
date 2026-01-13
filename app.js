@@ -39,6 +39,7 @@ async function main() {
   }
 }
 const mySecret=process.env.SECRET;
+// const ADMIN_ID=process.env.ADMIN_ID;
 
 const store = MongoStore.create({
   mongoUrl: DBUrl,
@@ -77,6 +78,7 @@ app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.currUser=req.user;
+  res.locals.adminId=process.env.ADMIN_ID;
   next();
 });
 
