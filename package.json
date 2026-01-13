@@ -1,9 +1,8 @@
 {
+  "$schema": "https://json.schemastore.org/package.json",
   "engines": {
     "node": "24.11.1"
   },
-
- 
   "name": "rentique",
   "version": "1.0.0",
   "description": "",

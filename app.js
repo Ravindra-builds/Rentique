@@ -10,13 +10,14 @@ const methodOverride = require("method-override");
 const listingsRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const session = require("express-session");
-const mongoStore=require("connect-mongo");
+const MongoStore = require("connect-mongo").default;
+
 const flash = require("connect-flash");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
 const passport=require("passport");
-const LocalStategy=require("passport-local");
+const LocalStrategy=require("passport-local");
 const User=require("./models/user.js");
 const userRouter=require("./routes/user.js");
 const Listing=require("./models/listings");
@@ -26,6 +27,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
+
 const DBUrl=process.env.ATLASDB_URL;
 main().catch((err) => console.log(err));
 async function main() {
@@ -34,16 +36,21 @@ async function main() {
 }
 const mySecret=process.env.SECRET;
 
-const store=mongoStore.create({
-  mongoUrl:DBUrl,
-  crypto:{
-    secret:mySecret
+const store = MongoStore.create({
+  mongoUrl: DBUrl,
+  crypto: {
+    secret:mySecret,
   },
-  touchAfter:24*3600,
-})
+  touchAfter: 24 * 3600,
+});
+
+store.on('error', (error) => {
+  console.log("Session store error:", error);
+});
+
 
 const sessionOptions = {
-  store,
+    store,
   secret:mySecret,
   resave: false,
   saveUninitialized: true,
@@ -58,7 +65,7 @@ app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStategy(User.authenticate()));
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
