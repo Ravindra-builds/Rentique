@@ -26,6 +26,10 @@
   </div>
    <%}%>
    <hr>
+   <%if(!currUser){ %>
+    <a href="/login"><button class="btn btn-outline-primary offset-md-2 mb-2">Login to Leave a Review</button></a>
+    <% } %>
+
    <%  let reviewed = false; 
    if(currUser){
      reviewed=listing.reviews.some(r =>r.author.equals(currUser._id));

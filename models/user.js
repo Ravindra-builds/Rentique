@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     },
 });
 userSchema.plugin(passportLocalMongoose);
-console.log(typeof(passportLocalMongoose));
+// console.log(typeof(passportLocalMongoose));
 
 userSchema.plugin(passportLocalMongoose);
 

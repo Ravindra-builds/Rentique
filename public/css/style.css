@@ -16,6 +16,18 @@ background-image: linear-gradient(to right top, #ffffff, #fbfafb, #f8f5f7, #f6f0
     font-size: 1.5rem;
     /* margin-left: 1rem; */
     display: inline-block;
+   animation: rotate 4s ease infinite;
+}
+@keyframes rotate {
+   0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(90deg);
+    }
+    100% {
+        transform: rotate(90deg);
+    }
 }
 .fa-house:hover{
     color: #B91C1C;
@@ -25,10 +37,21 @@ background-image: linear-gradient(to right top, #ffffff, #fbfafb, #f8f5f7, #f6f0
     margin-top: 1rem;
     margin-bottom: 1rem;
     font-weight: bold;
-    color:#db5858;
+    color:#dd5151;
+    animation: slideIn 1s ease;
 }
 .brand-heading:hover{
     color: #c73a3a;
+}
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 a{
     text-decoration: none;
@@ -45,13 +68,33 @@ a{
     flex-direction: column;
     /* border: 1px solid #ef4343 ; */
     box-shadow: 2px 4px 6px rgba(213, 72, 12, 0.32);
+    animation: slideUp 1s ease;
+     transition: all 0.5s ease;
 }
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }   
+}
+.index-card:hover{
+    box-shadow: 2px 6px 10px rgba(213, 72, 12, 0.562);
+    transform: scale(1.05);
+}
+
 .card-img-top{
    height: 75% !important;
     object-fit: cover;
 }
 .card-body{
     height: 25%;
+}
+.show-cards{
+    animation: slideUp 1s ease;
 }
 .signup{
     height: 400px;
@@ -119,6 +162,7 @@ a{
 }
 h1,h2,h3,h4,h5{
     color: #111827;
+    margin-bottom: 0;
 }
 p{
   color: #1F2937;
@@ -203,7 +247,7 @@ footer{
 /*Media Query */
  @media screen and (max-width:500px) {
 
-    /* navbar & index/home page */
+    /* navbar */
     .navbar{
         width: 100%;
 
@@ -251,6 +295,7 @@ footer{
     .search-inp{
         width: 250px;
     }
+    
     /* show-cards */
     .show-cards{
         h2{
