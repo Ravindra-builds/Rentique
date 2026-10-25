@@ -21,6 +21,7 @@
   --shadow: 0 6px 20px rgba(17, 24, 39, 0.08);
   --shadow-lg: 0 14px 40px rgba(17, 24, 39, 0.12);
 
+  --nav-h: 70px;
   --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
   /* Bootstrap overrides */
@@ -45,6 +46,7 @@ body {
   font-family: var(--font);
   color: var(--ink-2);
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -279,72 +281,413 @@ main { flex: 1 0 auto; }
 .flash.alert-danger  { background: #fef3f2; border-color: #fecdca; color: #b42318; }
 
 /* ==========================================================================
-   Hero (listings index)
+   Showcase hero (listings index): device mockups with live search
    ========================================================================== */
-.hero {
+.showcase {
   position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-bottom: 3rem;
+  padding: 2rem 0;
   overflow: hidden;
-  border-radius: var(--radius-lg);
-  padding: 4rem 2.5rem;
-  margin-bottom: 2.5rem;
-  color: #fff;
+  border-bottom: 1px solid var(--line);
   background:
-    linear-gradient(105deg, rgba(17, 24, 39, 0.82) 0%, rgba(17, 24, 39, 0.45) 60%, rgba(17, 24, 39, 0.1) 100%),
-    url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop") center / cover;
+    radial-gradient(900px 420px at 50% 0%, rgba(229, 72, 77, 0.10), transparent 70%),
+    radial-gradient(700px 420px at 100% 70%, rgba(59, 130, 246, 0.08), transparent 70%),
+    radial-gradient(600px 380px at 0% 80%, rgba(245, 165, 36, 0.08), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, var(--surface-2) 100%);
 }
 
-.hero h1 {
-  color: #fff;
-  font-size: clamp(2rem, 4vw, 3rem);
+/* subtle dot grid that fades out toward the edges */
+.showcase::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(17, 24, 39, 0.08) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, #000 30%, transparent 75%);
+}
+
+.showcase > .container { position: relative; z-index: 1; }
+
+/* sit flush under the navbar (only when no flash message comes before it) */
+main > .showcase:first-child { margin-top: -1.5rem; }
+
+.showcase-head { text-align: center; }
+
+.showcase-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.showcase-badge i { color: var(--brand); }
+
+.showcase-head h1 {
+  margin: 0.75rem 0 0.5rem;
+  font-size: clamp(2rem, min(5vw, 6.2vh), 3.4rem);
   font-weight: 800;
-  max-width: 14ch;
-  line-height: 1.1;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
 }
 
-.hero p {
-  color: rgba(255, 255, 255, 0.85);
+.text-brand { color: var(--brand); }
+
+.showcase-head p {
+  max-width: 60ch;
+  margin: 0 auto;
   font-size: 1.1rem;
-  max-width: 46ch;
+  color: var(--muted);
+}
+
+/* ---- Device stage ---- */
+.device-stage {
+  position: relative;
+  max-width: 1040px;
+  margin: 1.75rem auto 0;
+  padding: 0 9%;
+  container: stage / inline-size;
+}
+
+.laptop { filter: drop-shadow(0 30px 35px rgba(15, 23, 42, 0.18)); }
+
+.laptop-lid {
+  position: relative;
+  padding: 14px 14px 16px;
+  background: #0f172a;
+  border-radius: 20px 20px 4px 4px;
+}
+
+/* webcam */
+.laptop-lid::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #334155;
+  transform: translateX(-50%);
+}
+
+.laptop-screen {
+  container: screen / inline-size;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.laptop-base {
+  position: relative;
+  width: 114%;
+  height: 16px;
+  margin-left: -7%;
+  border-radius: 0 0 18px 18px;
+  background: linear-gradient(180deg, #e5e7eb 0%, #cbd5e1 55%, #94a3b8 100%);
+}
+
+/* finger notch */
+.laptop-base::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 16%;
+  height: 6px;
+  border-radius: 0 0 8px 8px;
+  background: #94a3b8;
+  transform: translateX(-50%);
+}
+
+.browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  background: #f1f5f9;
+  border-bottom: 1px solid var(--line);
+}
+
+.browser-bar .dot { width: 9px; height: 9px; border-radius: 50%; background: #ff5f57; }
+.browser-bar .dot:nth-child(2) { background: #febc2e; }
+.browser-bar .dot:nth-child(3) { background: #28c840; }
+
+.browser-url {
+  margin: 0 auto;
+  padding: 2px 16px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.browser-url i { font-size: 0.6rem; margin-right: 4px; color: #16a34a; }
+
+.screen-hero {
+  position: relative;
+  isolation: isolate;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.5rem, 2cqi, 1.1rem);
+  padding: clamp(0.75rem, 3cqi, 1.5rem);
+  text-align: center;
+  background: url("https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1400&auto=format&fit=crop") center / cover;
+}
+
+/* dark overlay so the heading and search stay readable on every photo */
+.screen-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.20) 0%, rgba(15, 23, 42, 0.55) 100%);
+}
+
+/* crossfading photo slideshow: 3 photos, 4s each */
+.screen-slides { position: absolute; inset: 0; z-index: -2; }
+
+.screen-slides span {
+  position: absolute;
+  inset: 0;
+  background: center / cover no-repeat;
+  opacity: 0;
+  animation: slideshow 12s infinite;
+}
+
+.screen-slides span:nth-child(1) { background-image: url("https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1400&auto=format&fit=crop"); }
+.screen-slides span:nth-child(2) { background-image: url("https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1400&auto=format&fit=crop"); animation-delay: 4s; }
+.screen-slides span:nth-child(3) { background-image: url("https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=1400&auto=format&fit=crop"); animation-delay: 8s; }
+
+@keyframes slideshow {
+  0%   { opacity: 0; transform: scale(1.06); }
+  8%   { opacity: 1; }
+  33%  { opacity: 1; }
+  41%  { opacity: 0; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+.screen-hero h2 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(0.95rem, 4cqi, 2rem);
+  font-weight: 800;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 }
 
 .hero-search {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
-  max-width: 520px;
-  padding: 0.4rem;
+  width: 100%;
+  max-width: min(500px, 58%); /* keeps clear of the overlapping phone/tablet */
+  padding: 0.35rem;
   background: #fff;
   border-radius: 999px;
   box-shadow: var(--shadow-lg);
 }
+
+.hero-search-icon { flex: none; margin-left: 0.9rem; color: var(--muted); }
 
 .hero-search input {
   flex: 1;
   min-width: 0;
   border: 0;
   outline: 0;
-  padding: 0 1rem;
+  padding: 0 0.25rem;
   font-size: 1rem;
   color: var(--ink);
   background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-.hero-search .btn { border-radius: 999px; padding: 0.7rem 1.4rem; }
+.hero-search .btn { border-radius: 999px; padding: 0.65rem 1.4rem; }
 
-.city-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.city-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
 
 .city-chip {
-  padding: 0.35rem 0.9rem;
+  padding: 0.3rem 0.85rem;
   border-radius: 999px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 500;
   color: #fff;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(6px);
   transition: background 0.2s ease;
 }
 
-.city-chip:hover { background: rgba(255, 255, 255, 0.28); color: #fff; }
+.city-chip:hover { background: rgba(255, 255, 255, 0.3); color: #fff; }
+
+/* ---- Phone & tablet ---- */
+.device {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  color: inherit;
+  animation: float 7s ease-in-out infinite;
+}
+
+.device:hover { color: inherit; }
+
+.device-screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+  border: 7px solid #0f172a;
+  box-shadow: 0 24px 50px rgba(15, 23, 42, 0.25);
+  transition: transform 0.3s ease;
+}
+
+.device:hover .device-screen { transform: translateY(-4px); }
+
+.device-screen img { width: 100%; object-fit: cover; background: #e5e7eb; }
+
+.device-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.65rem 0.7rem;
+  line-height: 1.3;
+}
+
+.device-card strong {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  color: var(--ink);
+  font-size: 0.8rem;
+}
+
+.device-muted { font-size: 0.7rem; color: var(--muted); }
+.device-card .price { font-size: 0.82rem; }
+
+.device-phone { left: 0; bottom: 4%; width: 17%; }
+.device-phone .device-screen { aspect-ratio: 9 / 18; border-radius: 28px; }
+.device-phone img { aspect-ratio: 1 / 1; }
+
+.phone-notch {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  z-index: 1;
+  width: 34%;
+  height: 12px;
+  border-radius: 999px;
+  background: #0f172a;
+  transform: translateX(-50%);
+}
+
+.device-tablet { right: 0; bottom: 2%; width: 25%; animation-delay: -3.5s; }
+.device-tablet .device-screen { aspect-ratio: 3 / 4; border-width: 9px; border-radius: 22px; }
+.device-tablet img { aspect-ratio: 4 / 3; }
+.device-tablet .device-card { padding: 0.85rem 0.9rem; gap: 0.35rem; }
+.device-tablet .device-card strong { font-size: 0.92rem; }
+.device-tablet .device-muted { font-size: 0.76rem; }
+
+/* scale phone/tablet text with the device size so it never overflows */
+.device { container-type: inline-size; }
+.device-phone .device-card strong { font-size: clamp(0.66rem, 7cqi, 0.8rem); }
+.device-phone .device-muted { font-size: clamp(0.58rem, 6cqi, 0.7rem); }
+.device-phone .price { font-size: clamp(0.66rem, 7cqi, 0.82rem); }
+.device-tablet .device-card strong { font-size: clamp(0.75rem, 5.4cqi, 0.92rem); }
+.device-tablet .device-muted { font-size: clamp(0.62rem, 4.4cqi, 0.76rem); }
+.device-tablet .price { font-size: clamp(0.7rem, 4.8cqi, 0.82rem); }
+
+/* too small to read: let the laptop stand alone */
+@container stage (max-width: 470px) {
+  .device { display: none; }
+  .hero-search { max-width: 500px; }
+}
+
+/* small laptop screen: drop the extras so the search stays usable */
+@container screen (max-width: 560px) {
+  .city-chips, .hero-search-icon { display: none; }
+  .hero-search { padding: 0.25rem; }
+  .hero-search input { padding-left: 0.75rem; font-size: 0.85rem; }
+  .hero-search .btn { padding: 0.4rem 0.9rem; font-size: 0.82rem; }
+}
+
+.device-row { display: flex; align-items: center; justify-content: space-between; margin-top: 0.35rem; }
+
+.device-pill {
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.device-pill-block { margin-top: 0.5rem; padding: 0.4rem; text-align: center; border-radius: 8px; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ---- Feature row ---- */
+.showcase-features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 920px;
+  margin: 1.75rem auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.showcase-features li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.showcase-features li:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+
+.feature-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--brand-50);
+  color: var(--brand);
+  font-size: 1.05rem;
+}
+
+.showcase-features strong { display: block; color: var(--ink); font-size: 0.95rem; }
+.showcase-features span:not(.feature-icon) { display: block; color: var(--muted); font-size: 0.85rem; }
 
 /* ==========================================================================
    Listing cards
@@ -743,15 +1086,58 @@ main { flex: 1 0 auto; }
 /* ==========================================================================
    Responsive
    ========================================================================== */
+@media (min-width: 992px) {
+  main > .showcase:first-child { margin-top: -3rem; }
+
+  .showcase { padding: 1rem 0 2.5rem; }
+  .device-stage { margin-top: 1.25rem; }
+
+  /* heading + laptop (with phone/tablet) fit in the first screen; the feature
+     cards may sit below the fold. Stage width comes from the viewport height:
+     ~280px goes to navbar + heading, the laptop is 0.82 × stage with a 16:10 screen. */
+  .device-stage {
+    --stage-w: min(clamp(680px, calc((100svh - 280px) * 1.95), 1100px), 100%);
+    width: var(--stage-w);
+    max-width: none;
+    /* % padding would resolve against the page container, so derive it from the stage itself */
+    padding: 0 calc(var(--stage-w) * 0.09);
+  }
+}
+
 @media (max-width: 991.98px) {
   .site-nav .navbar-collapse { padding-top: 1rem; }
+  .device-stage { padding: 0; max-width: 720px; }
+  .device { display: none; }
+  .hero-search { max-width: 500px; }
   .nav-search { max-width: none; margin: 0.25rem 0 0.75rem; }
   .price-card { position: static; }
 }
 
+@media (max-width: 767.98px) {
+  /* compact three-up feature row so the hero stays short on phones */
+  .showcase-features { gap: 0.5rem; margin-top: 1.25rem; }
+  .showcase-features li { flex-direction: column; gap: 0.4rem; padding: 0.75rem 0.4rem; text-align: center; }
+  .showcase-features span:not(.feature-icon) { display: none; }
+  .showcase-features strong { font-size: 0.78rem; line-height: 1.2; }
+  .feature-icon { width: 36px; height: 36px; font-size: 0.9rem; border-radius: 10px; }
+}
+
 @media (max-width: 575.98px) {
-  .hero { padding: 2.5rem 1.25rem; border-radius: var(--radius); }
-  .hero-search .btn { padding: 0.6rem 1rem; }
+  .showcase { padding: 1.5rem 0; }
+  .showcase-head p { font-size: 1rem; }
+  .device-stage { margin-top: 1.25rem; }
+  .laptop-lid { padding: 7px 7px 9px; border-radius: 12px 12px 3px 3px; }
+  .laptop-lid::before { top: 2px; width: 3px; height: 3px; }
+  .laptop-base { height: 10px; }
+  .browser-bar { height: 20px; padding: 0 8px; gap: 4px; }
+  .browser-bar .dot { width: 6px; height: 6px; }
+  .browser-url { font-size: 0.58rem; padding: 0 10px; }
+  .screen-hero { padding: 0.75rem; gap: 0.6rem; }
+  .city-chips { display: none; }
+  .hero-search { padding: 0.25rem; }
+  .hero-search-icon { display: none; }
+  .hero-search input { font-size: 0.9rem; }
+  .hero-search .btn { padding: 0.45rem 0.95rem; font-size: 0.85rem; }
   .listing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem 0.75rem; }
   .listing-card-title { font-size: 0.9rem; }
   .listing-card-location { font-size: 0.8rem; }

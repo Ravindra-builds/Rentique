@@ -2,22 +2,99 @@
 <% const isSearch = typeof query === "string" && query.length > 0; %>
 
 <% if (!isSearch) { %>
-  <section class="hero fade-up">
-    <h1 class="mb-3">Find a stay that feels like home.</h1>
-    <p class="mb-4">Apartments, villas and cozy rooms hosted by people across India.</p>
-    <form class="hero-search mb-4" method="get" action="/search" role="search">
-      <input type="search" name="search" placeholder="Where are you going?" aria-label="Search destinations" required>
-      <button class="btn btn-brand" type="submit"><i class="fa-solid fa-magnifying-glass me-2"></i>Search</button>
-    </form>
-    <div class="city-chips">
-      <% ["New Delhi", "Mumbai", "Goa", "Pune", "Chennai", "Kolkata"].forEach(city => { %>
-        <a class="city-chip" href="/search?search=<%= encodeURIComponent(city) %>"><%= city %></a>
-      <% }) %>
+  <% const [phoneStay, tabletStay] = listings; %>
+  <section class="showcase">
+    <div class="container">
+      <div class="showcase-head fade-up">
+        <span class="showcase-badge">
+          <i class="fa-solid fa-location-dot"></i>
+          <%= listings.length ? `${listings.length} stays across India` : "New stays every week" %>
+        </span>
+        <h1>Discover your <span class="text-brand">perfect stay</span></h1>
+        <p>Apartments, villas and cozy rooms hosted by real people across India.</p>
+      </div>
+
+      <div class="device-stage fade-up">
+        <!-- Laptop: the real search lives inside its screen -->
+        <div class="laptop">
+          <div class="laptop-lid">
+            <div class="laptop-screen">
+              <div class="browser-bar" aria-hidden="true">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                <span class="browser-url"><i class="fa-solid fa-lock"></i> rentique</span>
+              </div>
+              <div class="screen-hero">
+                <div class="screen-slides" aria-hidden="true"><span></span><span></span><span></span></div>
+                <h2>Where do you want to go?</h2>
+                <form class="hero-search" method="get" action="/search" role="search">
+                  <i class="fa-solid fa-magnifying-glass hero-search-icon" aria-hidden="true"></i>
+                  <input type="search" name="search" placeholder="Search a city…" aria-label="Search destinations" required>
+                  <button class="btn btn-brand" type="submit">Search</button>
+                </form>
+                <div class="city-chips">
+                  <% ["New Delhi", "Mumbai", "Goa", "Pune", "Chennai"].forEach(city => { %>
+                    <a class="city-chip" href="/search?search=<%= encodeURIComponent(city) %>"><%= city %></a>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="laptop-base" aria-hidden="true"></div>
+        </div>
+
+        <!-- Phone and tablet preview real listings -->
+        <% if (phoneStay) { %>
+          <a class="device device-phone" href="/listings/<%= phoneStay._id %>" aria-label="View <%= phoneStay.title %>">
+            <div class="device-screen">
+              <span class="phone-notch" aria-hidden="true"></span>
+              <img src="<%= phoneStay.imageUrl %>" alt="" class="js-fallback" loading="lazy">
+              <div class="device-card">
+                <strong><%= phoneStay.title %></strong>
+                <span class="device-muted"><%= phoneStay.location %></span>
+                <span class="price">&#8377;<%= phoneStay.price.toLocaleString("en-IN") %> <small>/ day</small></span>
+                <span class="device-pill device-pill-block">View stay</span>
+              </div>
+            </div>
+          </a>
+        <% } %>
+
+        <% if (tabletStay) { %>
+          <a class="device device-tablet" href="/listings/<%= tabletStay._id %>" aria-label="View <%= tabletStay.title %>">
+            <div class="device-screen">
+              <img src="<%= tabletStay.imageUrl %>" alt="" class="js-fallback" loading="lazy">
+              <div class="device-card">
+                <strong><%= tabletStay.title %></strong>
+                <span class="device-muted"><i class="fa-solid fa-location-dot me-1"></i><%= tabletStay.location %></span>
+                <div class="device-row">
+                  <span class="price">&#8377;<%= tabletStay.price.toLocaleString("en-IN") %> <small>/ day</small></span>
+                  <span class="device-pill">View</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        <% } %>
+      </div>
+
+      <ul class="showcase-features">
+        <li>
+          <span class="feature-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <div><strong>Browse stays</strong><span>Search homes by city or name</span></div>
+        </li>
+        <li>
+          <span class="feature-icon"><i class="fa-solid fa-star"></i></span>
+          <div><strong>Real guest reviews</strong><span>Ratings from real guests</span></div>
+        </li>
+        <li>
+          <a href="/listings/new" class="stretched-link" aria-label="List your place"></a>
+          <span class="feature-icon"><i class="fa-solid fa-key"></i></span>
+          <div><strong>Host with ease</strong><span>List your place in minutes</span></div>
+        </li>
+      </ul>
     </div>
   </section>
 <% } %>
 
-<div class="section-head">
+<div class="section-head" id="stays">
   <div>
     <h2><%= isSearch ? `Stays matching “${query}”` : "Explore stays" %></h2>
     <p class="text-muted-2 mb-0 small">

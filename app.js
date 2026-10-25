@@ -1,5 +1,13 @@
 if(process.env.NODE_ENV != "production"){
-  require("dotenv").config();
+  require("dotenv").config({ quiet: true });
+}
+
+// fail fast with a readable message instead of a cryptic MongoStore/session crash
+const missingEnv = ["ATLASDB_URL", "SECRET"].filter((key) => !process.env[key]);
+if (missingEnv.length) {
+  console.error(`Missing environment variable(s): ${missingEnv.join(", ")}`);
+  console.error("Copy .env.example to .env in the project root and fill in your values (see README → Getting started).");
+  process.exit(1);
 }
 const express = require("express");
 const app = express();

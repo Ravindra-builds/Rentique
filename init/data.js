@@ -151,7 +151,7 @@ let data = [
     description: "Comfortable home in a green city.",
     price: 900,
     location: "Bhopal, India",
-    imageUrl: "https://images.unsplash.com/photo-1600585154207-https://unsplash.com/photos/a-living-room-filled-with-furniture-and-a-large-window-OtXADkUh3-I?w=880&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=880&q=80",
     country: "India",
     geometry: { type: "Point", coordinates: [77.4126, 23.2599] }
   },
@@ -263,7 +263,7 @@ let data = [
   description: "A modern apartment in the capital city Ranchi, surrounded by greenery and close to major city attractions.",
   price: 900,
   location: "Ranchi, Jharkhand, India",
-  imageUrl: "https://https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1080&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D.unsplash.com/photo-1600585154207-57c2fc9a43ba?w=880&q=80",
+  imageUrl: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=880&q=80",
   country: "India",
   geometry: {
     type: "Point",
