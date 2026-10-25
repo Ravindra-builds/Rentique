@@ -1,35 +1,13 @@
-<% layout("/layouts/boilerplate")%>
+<% layout("/layouts/boilerplate") %>
 
-    <h2 class="mb-2 create-new-heading" style="text-align: center;">Create New Listing</h2>
-    <form method="post" action="/listings" novalidate class="needs-validation create-new">
-        <div class="row offset-md-2 col-md-8">
-        <label for="title" class="form-label mb-2"><b>Title</b></label>
-        <input type="text" id="title" name="listing[title]" required class="form-control" placeholder="Add catchy Title"><br><br>
-        <div class="invalid-feedback">Please provide a title!</div>
+<div class="page-head">
+  <h1>List your place</h1>
+  <p>Share a few details and your stay will be live on Rentique right away.</p>
+</div>
 
-        <label for="description" class="form-label mt-2"><b>Description</b></label>
-        <textarea id="description" name="listing[description]" required class="form-control" placeholder="Add a description"></textarea><br><br>
-        <div class="invalid-feedback">Please provide a description!</div>
-
-        <label for="imageUrl" class="form-label mt-2"><b>Image URL</b></label>
-        <input type="text" id="imageUrl" name="listing[imageUrl]" class="form-control" placeholder="ImageUrl"><br><br>
-         <div class="row ">
-            <div class="col-6">
-            <label for="price" class="form-label mt-2"><b>Price per day</b></label>
-            <input type="number" id="price" name="listing[price]" required class="form-control" placeholder=" &#8377;1200">
-            <div class="invalid-feedback">Please provide a price!</div>
-        </div>
-        <div class="col-6">
-            <label for="country" class="form-label mt-2"><b>Country</b></label>
-            <input type="text" id="country" name="listing[country]" value="India" class="form-control">
-            <div class="invalid-feedback">Please provide a country!</div>
-        </div>
-        </div>
-
-        <label for="location" class="form-label"><b>Location</b></label>
-        <input type="text" id="location" name="listing[location]" required class="form-control" placeholder="New-Delhi,India">
-        <div class="invalid-feedback">Please provide a location!</div>
-        </div>
-        <button type="submit" class="btn btn-primary offset-md-2 mt-4 mb-4 create-new-btn">Create Listing</button>
-    </form>
-
+<%- include("../includes/listing-form.ejs", {
+  listing: {},
+  action: "/listings",
+  submitLabel: "Publish listing",
+  cancelUrl: "/listings"
+}) %>

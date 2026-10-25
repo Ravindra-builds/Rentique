@@ -9,7 +9,7 @@ const listingController=require("../controller/listing.js");
 
 router.route("/")
  .get(listingController.getAllListings)
- .post(validateListing,listingController.createNewListing);
+ .post(isLoggedIn,validateListing,listingController.createNewListing);
 
  //new route
  router.get("/new",isLoggedIn,listingController.renderNewForm);

@@ -1,10 +1,10 @@
 const User = require("../models/user.js");
 
 module.exports.renderSignupForm= async (req, res) => {
-  res.render("./user/signup.ejs");
+  res.render("./user/signup.ejs",{pageTitle:"Sign up"});
 }
 
-module.exports.signup=async (req, res) => {
+module.exports.signup=async (req, res, next) => {
   try {
     let { username, email, password } = req.body;
     const newUser = new User({ username, email });
@@ -16,13 +16,14 @@ module.exports.signup=async (req, res) => {
       res.redirect("/listings");
     });
   } catch (e) {
-    req.flash("error", e.message);
+    // duplicate email comes back as a raw MongoDB error, so give it a readable message
+    req.flash("error", e.code === 11000 ? "An account with that email already exists." : e.message);
     res.redirect("/signup");
   }
 }
 
 module.exports.renderLoginForm= (req, res) => {
-  res.render("./user/login.ejs");
+  res.render("./user/login.ejs",{pageTitle:"Log in"});
 }
 
 module.exports.login=async (req, res) => {
@@ -31,7 +32,7 @@ module.exports.login=async (req, res) => {
   res.redirect(redirectUrl);
 }
 
-module.exports.logout=(req,res)=>{
+module.exports.logout=(req,res,next)=>{
   req.logout((err)=>{
     if(err)
        return next(err);

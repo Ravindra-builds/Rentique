@@ -1,8 +1,9 @@
-<% layout("/layouts/boilerplate")%>
+<% layout("/layouts/boilerplate") %>
+<% const code = typeof status !== "undefined" ? status : 500; %>
 
-<body>
-    <h2 class="mb-2" style="text-align: center;color: rgb(205, 160, 47);">Error!</h2>
-  <div class="alert alert-warning" role="alert">
-    <%=message%>
+<div class="error-page fade-up">
+  <div class="error-code"><%= code %></div>
+  <h1 class="h3 mt-3"><%= code === 404 ? "We couldn’t find that page" : "Something went wrong" %></h1>
+  <p class="text-muted-2 mx-auto mb-4" style="max-width: 46ch;"><%= message %></p>
+  <a class="btn btn-brand" href="/listings"><i class="fa-solid fa-house me-2"></i>Back to listings</a>
 </div>
-</body>

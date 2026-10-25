@@ -7,14 +7,14 @@ module.exports.getAllListings=wrapAsync(async (req, res) => {
    res.render("./listings/index.ejs",{listings});
  })
 
- module.exports.renderNewForm=async(req, res) => {  
+ module.exports.renderNewForm=wrapAsync(async(req, res) => {  
     const count=await Listing.countDocuments({owner:req.user._id});
     if(count>=2){
         req.flash("error","Listing limit reached,You can only create two listings.");
         return res.redirect("/listings");
     } 
-    res.render("./listings/new.ejs");
-}
+    res.render("./listings/new.ejs",{pageTitle:"List your place"});
+})
 
 module.exports.createNewListing=wrapAsync(async (req, res) => { 
        const count=await Listing.countDocuments({owner:req.user._id});
@@ -22,6 +22,9 @@ module.exports.createNewListing=wrapAsync(async (req, res) => {
         req.flash("error","Listing limit reached,You can only create two listings.");
         return res.redirect("/listings");
     }   
+    if(!req.body.listing.imageUrl){
+        delete req.body.listing.imageUrl; // let the schema default photo apply
+    }
     const newListing=new Listing(req.body.listing);
     newListing.owner=req.user._id;
     // console.log(newListing);
@@ -54,7 +57,7 @@ module.exports.showListing=wrapAsync(async (req, res) => {
         return res.redirect("/listings");
     }
     // console.log(listing);
-    res.render("./listings/show.ejs",{listing});
+    res.render("./listings/show.ejs",{listing,pageTitle:listing.title});
 })
 
 module.exports.editListing=wrapAsync(async (req, res) => {
@@ -64,12 +67,25 @@ module.exports.editListing=wrapAsync(async (req, res) => {
         req.flash("error","Listing not found!");
         return res.redirect("/listings");
     }
-    res.render("./listings/edit.ejs",{listing});
+    res.render("./listings/edit.ejs",{listing,pageTitle:"Edit listing"});
 })
 
 module.exports.updateListing=wrapAsync(async (req, res) => {
     const {id}=req.params;
-    let listing= await Listing.findByIdAndUpdate(id,{...req.body.listing});
+    const update={...req.body.listing};
+    if(!update.imageUrl){
+        delete update.imageUrl; // keep the current photo
+    }
+    let listing= await Listing.findById(id);
+    // re-geocode only when the location actually changed
+    if(update.location && update.location!==listing.location){
+        try{
+            update.geometry=await geocode(update.location);
+        }catch{
+            update.geometry={ type:"Point", coordinates:[0,0] };
+        }
+    }
+    await Listing.findByIdAndUpdate(id,update,{runValidators:true});
     req.flash("success","Listing Updated!");
     res.redirect("/listings/"+id);
 })

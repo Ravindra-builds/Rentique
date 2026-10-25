@@ -21,6 +21,8 @@ const LocalStrategy=require("passport-local");
 const User=require("./models/user.js");
 const userRouter=require("./routes/user.js");
 const Listing=require("./models/listings");
+const wrapAsync=require("./utils/wrapAsync.js");
+const ExpressError=require("./utils/ExpressError.js");
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
@@ -60,7 +62,6 @@ const sessionOptions = {
   resave: false,
   saveUninitialized: true,
   cookie: {
-    expire: Date.now() + 7 * 24 * 60 * 60 * 1000,
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   },
@@ -90,32 +91,49 @@ app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/",userRouter);
 
-app.get("/search", async (req, res) => {
-  const { search } = req.query;
+app.get("/search", wrapAsync(async (req, res) => {
+  const query = String(req.query.search || "").trim().slice(0, 100);
+  if (!query) {
+    return res.redirect("/listings");
+  }
+  // escape regex special characters so user input is matched literally
+  const pattern = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
 
   const listings = await Listing.find({
     $or: [
-      { title: { $regex: search, $options: "i" } },
-      { location: { $regex: search, $options: "i" } }
+      { title: pattern },
+      { location: pattern },
+      { country: pattern }
     ]
   });
-  if(listings.length==0){
-    req.flash("error","Not found any destination");
-    return res.redirect("/listings");
-  }
 
-  res.render("./listings/index.ejs",{listings});
+  res.render("./listings/index.ejs", { listings, query, pageTitle: `Search: ${query}` });
+}));
+
+// 404 for any unknown route
+app.use((req, res, next) => {
+  next(new ExpressError(404, "The page you’re looking for doesn’t exist or may have been moved."));
 });
-
 
 // Error handling middleware
 
 app.use((err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);
+  }
+  // invalid MongoDB ids (e.g. /listings/abc) should be a 404, not a crash
+  if (err.name === "CastError") {
+    err = new ExpressError(404, "We couldn’t find that listing.");
+  }
   let { status = 500, message = "Something went wrong!" } = err;
-  res.status(status).render("error.ejs", { message });
+  if (status >= 500) {
+    console.error(err);
+    message = "Something went wrong on our side. Please try again in a moment.";
+  }
+  res.status(status).render("error.ejs", { message, status, pageTitle: "Error" });
 });
 
-const port=process.env.PORT;
+const port=process.env.PORT || 8080;
 app.listen(port, () => {
   console.log(`App is listening on port ${port}`);
 });

@@ -1,0 +1,72 @@
+<%#
+  Shared form for creating and editing a listing.
+  Expects: listing (object, may be empty), action (url), submitLabel (string)
+%>
+<form method="post" action="<%= action %>" novalidate class="needs-validation">
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="form-card">
+        <div class="form-section">
+          <div class="form-section-title">Basics</div>
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" id="title" name="listing[title]" value="<%= listing.title || '' %>" class="form-control" placeholder="e.g. Sunny 2BHK near the beach" maxlength="100" required>
+            <div class="invalid-feedback">Please give your listing a title.</div>
+          </div>
+          <div>
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description" name="listing[description]" rows="5" class="form-control" placeholder="What makes your place special? Mention rooms, amenities and what’s nearby." required><%= listing.description || '' %></textarea>
+            <div class="invalid-feedback">Please describe your place.</div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Pricing & location</div>
+          <div class="row g-3">
+            <div class="col-sm-6">
+              <label for="price" class="form-label">Price per day</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text">&#8377;</span>
+                <input type="number" id="price" name="listing[price]" value="<%= listing.price ?? '' %>" class="form-control" placeholder="1200" min="0" step="1" required>
+                <div class="invalid-feedback">Please enter a valid price.</div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label for="country" class="form-label">Country</label>
+              <input type="text" id="country" name="listing[country]" value="<%= listing.country || 'India' %>" class="form-control" required>
+              <div class="invalid-feedback">Please enter a country.</div>
+            </div>
+            <div class="col-12">
+              <label for="location" class="form-label">Location</label>
+              <input type="text" id="location" name="listing[location]" value="<%= listing.location || '' %>" class="form-control" placeholder="e.g. Baga, Goa" required>
+              <div class="form-text">We use this to place your listing on the map.</div>
+              <div class="invalid-feedback">Please enter a location.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="form-card">
+        <div class="form-section-title">Photo</div>
+        <div class="image-preview mb-3" id="imagePreview">
+          <% if (listing.imageUrl) { %>
+            <img src="<%= listing.imageUrl %>" alt="Listing photo preview">
+          <% } else { %>
+            <span><i class="fa-regular fa-image d-block fs-3 mb-2"></i>Paste an image URL to preview</span>
+          <% } %>
+        </div>
+        <label for="imageUrl" class="form-label">Image URL</label>
+        <input type="url" id="imageUrl" name="listing[imageUrl]" value="<%= listing.imageUrl || '' %>" class="form-control" placeholder="https://…" data-preview="#imagePreview">
+        <div class="form-text">Optional — a default photo is used if left empty.</div>
+        <div class="invalid-feedback">Please enter a valid URL.</div>
+      </div>
+
+      <div class="d-grid gap-2 mt-4">
+        <button type="submit" class="btn btn-brand btn-lg"><%= submitLabel %></button>
+        <a href="<%= cancelUrl %>" class="btn btn-ghost">Cancel</a>
+      </div>
+    </div>
+  </div>
+</form>

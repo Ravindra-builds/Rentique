@@ -1,15 +1,62 @@
-<% layout("/layouts/boilerplate")%>
-    <div class="index-cards">
-        <% for(listing of listings) { %>
-    <a href="/listings/<%= listing._id %>">
-    <div class="card index-card">
-       <img src="<%= listing.imageUrl %>" class="card-img-top" alt="image of <%= listing.title %>">
-      <div class="card-body">
-        <h5><%= listing.title %></h5>
-        <p><b>Price:</b> &#8377; <%= listing.price.toLocaleString("en-IN") %></p>
+<% layout("/layouts/boilerplate") %>
+<% const isSearch = typeof query === "string" && query.length > 0; %>
+
+<% if (!isSearch) { %>
+  <section class="hero fade-up">
+    <h1 class="mb-3">Find a stay that feels like home.</h1>
+    <p class="mb-4">Apartments, villas and cozy rooms hosted by people across India.</p>
+    <form class="hero-search mb-4" method="get" action="/search" role="search">
+      <input type="search" name="search" placeholder="Where are you going?" aria-label="Search destinations" required>
+      <button class="btn btn-brand" type="submit"><i class="fa-solid fa-magnifying-glass me-2"></i>Search</button>
+    </form>
+    <div class="city-chips">
+      <% ["New Delhi", "Mumbai", "Goa", "Pune", "Chennai", "Kolkata"].forEach(city => { %>
+        <a class="city-chip" href="/search?search=<%= encodeURIComponent(city) %>"><%= city %></a>
+      <% }) %>
     </div>
-</div>
-    </a>
-     <% } %>
+  </section>
+<% } %>
+
+<div class="section-head">
+  <div>
+    <h2><%= isSearch ? `Stays matching “${query}”` : "Explore stays" %></h2>
+    <p class="text-muted-2 mb-0 small">
+      <%= listings.length %> <%= listings.length === 1 ? "place" : "places" %> available
+    </p>
+  </div>
+  <% if (isSearch) { %>
+    <a class="btn btn-ghost btn-sm" href="/listings"><i class="fa-solid fa-xmark me-1"></i>Clear search</a>
+  <% } %>
 </div>
 
+<% if (listings.length === 0) { %>
+  <div class="empty-state">
+    <span class="icon"><i class="fa-solid fa-map-location-dot"></i></span>
+    <h3 class="h5">No stays found</h3>
+    <p class="text-muted-2 mb-4">Try another city, or be the first to list a place here.</p>
+    <a class="btn btn-ghost me-2" href="/listings">Browse all stays</a>
+    <a class="btn btn-brand" href="/listings/new">List your place</a>
+  </div>
+<% } else { %>
+  <div class="listing-grid">
+    <% for (let listing of listings) { %>
+      <a class="listing-card fade-up" href="/listings/<%= listing._id %>">
+        <div class="listing-card-media">
+          <img src="<%= listing.imageUrl %>" alt="<%= listing.title %>" loading="lazy" class="js-fallback">
+          <span class="listing-card-badge">
+            <% if (listing.reviews && listing.reviews.length) { %>
+              <i class="fa-solid fa-star text-warning me-1"></i><%= listing.reviews.length %> <%= listing.reviews.length === 1 ? "review" : "reviews" %>
+            <% } else { %>
+              New
+            <% } %>
+          </span>
+        </div>
+        <div class="listing-card-body">
+          <h3 class="listing-card-title"><%= listing.title %></h3>
+          <p class="listing-card-location"><%= listing.location %></p>
+          <span class="price">&#8377;<%= listing.price.toLocaleString("en-IN") %> <small>/ day</small></span>
+        </div>
+      </a>
+    <% } %>
+  </div>
+<% } %>

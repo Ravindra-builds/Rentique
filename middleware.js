@@ -23,7 +23,11 @@ module.exports.saveRedirectUrl = (req, res, next) => {
 module.exports.isOwner = async (req, res, next) => {
   let { id } = req.params;
   let listing = await Listing.findById(id);
-   let isOwner = listing.owner.equals(res.locals.currUser._id);
+  if (!listing) {
+    req.flash("error", "Listing not found!");
+    return res.redirect("/listings");
+  }
+  let isOwner = listing.owner && listing.owner.equals(res.locals.currUser._id);
   let isAdmin = res.locals.currUser._id.toString() === adminId;
   
   if (!isOwner && !isAdmin) {
@@ -37,21 +41,25 @@ module.exports.validateListing = (req, res, next) => {
   let { error } = ListingSchema.validate(req.body.listing);
   if (error) {
     let errmsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(404, errmsg);
+    throw new ExpressError(400, errmsg);
   } else next();
 };
 module.exports.validateReview = (req, res, next) => {
   let { error } = reviewSchema.validate(req.body);
   if (error) {
     let errmsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(404, errmsg);
+    throw new ExpressError(400, errmsg);
   }
   next();
 };
 module.exports.isAuthor = async (req, res, next) => {
   let { id, reviewId } = req.params;
   let review = await Review.findById(reviewId);
-   let isAdmin = res.locals.currUser._id.toString() === adminId;
+  if (!review) {
+    req.flash("error", "Review not found!");
+    return res.redirect(`/listings/${id}`);
+  }
+  let isAdmin = res.locals.currUser._id.toString() === adminId;
   if (!review.author.equals(res.locals.currUser._id) && !isAdmin) {
     req.flash("error", "You are not the Author!");
     return res.redirect(`/listings/${id}`);

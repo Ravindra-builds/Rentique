@@ -1,62 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>footer</title>
-</head>
-<body>
- <footer>
-    <div class="footer-content">
-        <div class="footer-webinfo">
-            <div class="web-info">
-             <i class="fa-solid fa-house"></i>
-            <h4 class="brand-heading">Rentique</h4>
-            </div>
-              <div class="footer-contact">
-           
-            <i class="fa-brands fa-instagram"></i>
-            <i class="fa-brands fa-square-facebook"></i>
-            <i class="fa-brands fa-square-x-twitter"></i>
-            <a href="https://www.linkedin.com/in/ravindra-yadav-778498390"style="leaflet-color-markers"><i class="fa-brands fa-linkedin"></i></a>
-            <p>Phone:+91-990990222</p>
-            <p>Email: rentique@gamil.com</p>
-        </div>
-        </div>
-      <div class="footer-info">
-          <div class="footer-links">
-            <h5>Quick Links</h5>
-            <ul>
-                <li><a href="/listings">explore</a></li>
-                <li><a href="/listings/new">Add new listing</a></li>
-                <li><a href="">About</a></li> 
-            </ul>
-        </div>
-        <div class="footer-links">
-            <h5>Top cities</h5>
-            <ul>
-                <li><a href="/search?search=New+delhi">New-Delhi</a></li>
-                <li><a href="/search?search=mumbai">Mumbai</a></li>
-                <li><a href="/search?search=pune">pune</a></li> 
-            </ul>
-        </div>
-        <div class="footer-links">
-            <ul>
-                <li><a href="/search?search=goa">Goa</a></li>
-                <li><a href="/search?search=chennai">Chennai</a></li>
-                <li><a href="/search?search=kolkata">kolkata</a></li> 
-                 <li><a href="/search?search=Ranchi">Ranchi</a></li> 
-            </ul>
+<footer class="site-footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <a class="brand mb-3" href="/listings">
+          <span class="brand-mark"><i class="fa-solid fa-house"></i></span>
+          Rentique
+        </a>
+        <p class="text-muted-2 mb-3" style="max-width: 34ch;">
+          Discover homes, villas and unique stays across India — or list your own place in minutes.
+        </p>
+        <div class="social-links">
+          <a href="https://www.linkedin.com/in/ravindra-yadav-778498390" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="mailto:rentique@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
         </div>
       </div>
-    </div>
-    <hr>
-    <div class="footer-bottom">
-            <span>&copy; 2024 Rentique. All rights reserved.</span><br>
-            <span>Created with &#x2764;&#xfe0f; by Ravindra</span>
-        </div>
-     
- </footer>
 
-</body>
-</html>
+      <div class="col-6 col-md-4 col-lg-2">
+        <h6>Explore</h6>
+        <ul>
+          <li><a href="/listings">All stays</a></li>
+          <li><a href="/listings/new">List your place</a></li>
+          <li><a href="/signup">Create account</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg-3">
+        <h6>Top cities</h6>
+        <div class="row">
+          <ul class="col-6">
+            <li><a href="/search?search=New+Delhi">New Delhi</a></li>
+            <li><a href="/search?search=Mumbai">Mumbai</a></li>
+            <li><a href="/search?search=Pune">Pune</a></li>
+            <li><a href="/search?search=Goa">Goa</a></li>
+          </ul>
+          <ul class="col-6">
+            <li><a href="/search?search=Chennai">Chennai</a></li>
+            <li><a href="/search?search=Kolkata">Kolkata</a></li>
+            <li><a href="/search?search=Ranchi">Ranchi</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-lg-3">
+        <h6>Contact</h6>
+        <ul>
+          <li><a href="mailto:rentique@gmail.com"><i class="fa-regular fa-envelope me-2"></i>rentique@gmail.com</a></li>
+          <li><a href="tel:+91990990222"><i class="fa-solid fa-phone me-2"></i>+91 990990222</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; <%= new Date().getFullYear() %> Rentique. All rights reserved.</span>
+      <span>Built with <i class="fa-solid fa-heart text-danger"></i> by Ravindra</span>
+    </div>
+  </div>
+</footer>
